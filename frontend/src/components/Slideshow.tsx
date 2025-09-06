@@ -23,7 +23,11 @@ export const Slideshow: React.FC<SlideshowProps> = ({
 
   // Handle image load success
   const handleImageLoad = (imageId: string) => {
-    setLoadedImages(prev => new Set([...prev, imageId]));
+    setLoadedImages(prev => {
+      const newSet = new Set(prev);
+      newSet.add(imageId);
+      return newSet;
+    });
     setImageErrors(prev => {
       const newSet = new Set(prev);
       newSet.delete(imageId);
@@ -33,7 +37,11 @@ export const Slideshow: React.FC<SlideshowProps> = ({
 
   // Handle image load error
   const handleImageError = (imageId: string) => {
-    setImageErrors(prev => new Set([...prev, imageId]));
+    setImageErrors(prev => {
+      const newSet = new Set(prev);
+      newSet.add(imageId);
+      return newSet;
+    });
     console.warn(`Failed to load image: ${imageId}`);
   };
 
