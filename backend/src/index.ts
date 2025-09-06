@@ -59,8 +59,9 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-// For Vercel, we export the app directly
-if (process.env.NODE_ENV !== 'production') {
+// For Vercel serverless functions, we need to export the app directly
+// For local development, we can still use app.listen
+if (process.env.VERCEL !== '1') {
   app.listen(port, () => {
     console.log(`🚀 Server running on port ${port}`);
     console.log(`📊 Health check: http://localhost:${port}/health`);
