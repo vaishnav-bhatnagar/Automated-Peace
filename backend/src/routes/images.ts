@@ -123,7 +123,7 @@ router.put('/:id', async (req, res) => {
     broadcastImageUpdate('updated', image);
 
     res.json(image);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error updating image:', error);
     if (error.code === 'P2025') {
       return res.status(404).json({ error: 'Image not found' });
@@ -145,7 +145,7 @@ router.delete('/:id', async (req, res) => {
     broadcastImageUpdate('deleted', image);
 
     res.json({ message: 'Image deleted successfully' });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error deleting image:', error);
     if (error.code === 'P2025') {
       return res.status(404).json({ error: 'Image not found' });
