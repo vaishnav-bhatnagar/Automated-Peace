@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Image } from '../types';
+import { Image } from '../types/index';
 import { useImagePreloader } from './useImagePreloader';
 
 interface UseSlideshowOptions {

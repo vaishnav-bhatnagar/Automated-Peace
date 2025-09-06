@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from '../types';
+import { Image } from '../types/index';
 
 interface ImageCreditProps {
   image: Image | null;

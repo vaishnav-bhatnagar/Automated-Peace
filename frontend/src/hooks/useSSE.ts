@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SSEMessage } from '../types';
+import { SSEMessage } from '../types/index';
 
 interface UseSSEOptions {
   url: string;

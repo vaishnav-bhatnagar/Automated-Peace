@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { Image } from '../types';
+import { Image } from '../types/index';
 
 export const useImagePreloader = () => {
   const preloadedImages = useRef<Map<string, HTMLImageElement>>(new Map());

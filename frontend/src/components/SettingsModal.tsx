@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SlideshowSettings } from '../types';
+import { SlideshowSettings } from '../types/index';
 
 interface SettingsModalProps {
   isOpen: boolean;
