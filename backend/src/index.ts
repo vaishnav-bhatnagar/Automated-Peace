@@ -59,11 +59,14 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-app.listen(port, () => {
-  console.log(`🚀 Server running on port ${port}`);
-  console.log(`📊 Health check: http://localhost:${port}/health`);
-  console.log(`🖼️  Images API: http://localhost:${port}/api/images`);
-  console.log(`📡 Stream API: http://localhost:${port}/api/stream/images`);
-});
+// For Vercel, we export the app directly
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`🚀 Server running on port ${port}`);
+    console.log(`📊 Health check: http://localhost:${port}/health`);
+    console.log(`🖼️  Images API: http://localhost:${port}/api/images`);
+    console.log(`📡 Stream API: http://localhost:${port}/api/stream/images`);
+  });
+}
 
 export default app;
