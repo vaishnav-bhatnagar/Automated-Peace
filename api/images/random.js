@@ -1,4 +1,4 @@
-// Simple mock data for landscape images
+// Mock data for landscape images
 const mockImages = [
   {
     id: '1',
@@ -47,8 +47,8 @@ const mockImages = [
   },
   {
     id: '4',
-    url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop',
-    thumb_url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&h=1080&fit=crop',
+    thumb_url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=300&fit=crop',
     source: 'Unsplash',
     title: 'Ocean Waves',
     photographer: 'Sarah Wilson',
@@ -62,8 +62,7 @@ const mockImages = [
   }
 ];
 
-// Simple API handler for Vercel serverless functions
-module.exports = (req, res) => {
+export default function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -74,78 +73,12 @@ module.exports = (req, res) => {
     return;
   }
 
-  const { url } = req;
-  
-  // Health check endpoint
-  if (url === '/health' || url === '/api/health') {
-    res.status(200).json({ 
-      status: 'OK', 
-      timestamp: new Date().toISOString(),
-      message: 'Automated Peace API is running'
-    });
-    return;
-  }
-  
-  // Get all images
-  if (url === '/api/images' && req.method === 'GET') {
-    res.status(200).json(mockImages);
-    return;
-  }
-  
-  // Get random images
-  if (url.startsWith('/api/images/random') && req.method === 'GET') {
-    const urlParams = new URLSearchParams(url.split('?')[1]);
-    const count = parseInt(urlParams.get('n')) || 1;
+  if (req.method === 'GET') {
+    const count = parseInt(req.query.n) || 1;
     const shuffled = [...mockImages].sort(() => 0.5 - Math.random());
     const randomImages = shuffled.slice(0, Math.min(count, mockImages.length));
     res.status(200).json(randomImages);
-    return;
+  } else {
+    res.status(405).json({ error: 'Method not allowed' });
   }
-  
-  // Get single image by ID
-  if (url.match(/^\/api\/images\/\d+$/) && req.method === 'GET') {
-    const id = url.split('/').pop();
-    const image = mockImages.find(img => img.id === id);
-    if (image) {
-      res.status(200).json(image);
-    } else {
-      res.status(404).json({ error: 'Image not found' });
-    }
-    return;
-  }
-  
-  // SSE stream endpoint (simplified)
-  if (url === '/api/stream/images' && req.method === 'GET') {
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    
-    // Send initial data
-    res.write(`data: ${JSON.stringify({ type: 'connected', message: 'Connected to image stream' })}\n\n`);
-    
-    // Send a random image every 5 seconds (for demo)
-    const interval = setInterval(() => {
-      const randomImage = mockImages[Math.floor(Math.random() * mockImages.length)];
-      res.write(`data: ${JSON.stringify({ type: 'new_image', data: randomImage })}\n\n`);
-    }, 5000);
-    
-    // Clean up on client disconnect
-    req.on('close', () => {
-      clearInterval(interval);
-    });
-    return;
-  }
-  
-  // Default 404 response
-  res.status(404).json({ 
-    error: 'Not Found', 
-    message: 'API endpoint not found',
-    availableEndpoints: [
-      'GET /health',
-      'GET /api/images',
-      'GET /api/images/random?n=1',
-      'GET /api/images/:id',
-      'GET /api/stream/images'
-    ]
-  });
-};
+}
