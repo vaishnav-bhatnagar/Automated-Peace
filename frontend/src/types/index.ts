@@ -1,4 +1,4 @@
-export interface Image {
+export interface ImageData {
   id: string;
   url: string;
   thumb_url?: string;
@@ -14,6 +14,9 @@ export interface Image {
   created_at: string;
   updated_at: string;
 }
+
+// Keep Image as alias for backward compatibility
+export type Image = ImageData;
 
 export interface SSEMessage {
   type: 'connected' | 'heartbeat' | 'image_update';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image } from '../types/index';
+import type { Image } from '../types/index';
 
 interface SlideshowProps {
   images: Image[];
